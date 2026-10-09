@@ -15,3 +15,6 @@
 .touch-note{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);font-size:8px;letter-spacing:1px;color:#d4e0eb8a;white-space:nowrap;pointer-events:none}
 @media (pointer:coarse), (max-width:740px){.touch-controls{display:block}canvas{touch-action:none}body{padding:7px}.topbar{margin-bottom:8px}#hud{margin-bottom:7px}.stat .value{font-size:15px}.footnote{display:none}.help{font-size:10px}}
 @media(max-width:420px){.move-pad{width:104px;height:104px;left:5px;bottom:16px}.pad-base{inset:5px}.move-knob{width:40px;height:40px}.fire-touch{width:76px;height:76px;right:9px;bottom:21px}.touch-note{font-size:7px;bottom:4px;letter-spacing:.5px}}
+
+/* Menus must sit above touch controls while the game is paused or at the start screen. */
+#overlay{z-index:7}
