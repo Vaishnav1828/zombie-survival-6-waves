@@ -24,9 +24,16 @@
   </section>
   <section class="arena" aria-label="Zombie survival arena">
     <canvas id="game" width="960" height="600" aria-label="Game field. Move with WASD or arrow keys, aim with mouse, click to fire."></canvas>
+    <div id="touchControls" class="touch-controls" aria-label="Mobile touch controls">
+      <div id="movePad" class="move-pad" role="application" aria-label="Drag the joystick to move">
+        <span class="pad-label">MOVE</span><div class="pad-base"><div id="moveKnob" class="move-knob"></div></div>
+      </div>
+      <button id="fireTouch" class="fire-touch" type="button" aria-label="Hold to auto-aim and fire">FIRE <span>◎</span></button>
+      <div class="touch-note">DRAG TO MOVE · HOLD FIRE TO AUTO-AIM</div>
+    </div>
     <div id="toast" role="status" aria-live="polite"></div>
     <div id="overlay">
-      <div class="modal"><div class="eyebrow">Emergency Broadcast // 06</div><h2 id="title">THE NIGHT<br><span>IS HUNGRY.</span></h2><p id="message">Six waves stand between you and sunrise. Timed weapons are your only advantage. Find them, fight smart, and do not get surrounded.</p><div class="feature-row"><span class="feature">6 escalating waves</span><span class="feature">2 enemy classes</span><span class="feature">Timed weapon drops</span></div><button id="start" class="main-btn" type="button">ENTER THE QUARANTINE</button><p class="help"><b>MOVE</b> <span class="keycap">W</span><span class="keycap">A</span><span class="keycap">S</span><span class="keycap">D</span> or arrows &nbsp; <b>AIM</b> mouse &nbsp; <b>FIRE</b> click / Space<br><b>PAUSE</b> <span class="keycap">P</span> &nbsp; <b>RESTART</b> <span class="keycap">R</span> &nbsp; Enable sound using the top-right button</p></div>
+      <div class="modal"><div class="eyebrow">Emergency Broadcast // 06</div><h2 id="title">THE NIGHT<br><span>IS HUNGRY.</span></h2><p id="message">Six waves stand between you and sunrise. Timed weapons are your only advantage. Find them, fight smart, and do not get surrounded.</p><div class="feature-row"><span class="feature">6 escalating waves</span><span class="feature">2 enemy classes</span><span class="feature">Timed weapon drops</span></div><button id="start" class="main-btn" type="button">ENTER THE QUARANTINE</button><p class="help"><b>MOVE</b> <span class="keycap">W</span><span class="keycap">A</span><span class="keycap">S</span><span class="keycap">D</span> or arrows &nbsp; <b>AIM</b> mouse &nbsp; <b>FIRE</b> click / Space<br><b>PAUSE</b> <span class="keycap">P</span> &nbsp; <b>RESTART</b> <span class="keycap">R</span> &nbsp; On mobile: drag joystick + hold FIRE · Enable sound at top-right</p></div>
     </div>
   </section>
   <footer id="bottomline"><span class="live-hint" id="statusLine">OBJECTIVE: SURVIVE. ADAPT. ESCAPE.</span><span><span class="keycap">P</span> Pause <span class="keycap">R</span> Restart</span><span class="footnote">All sounds are synthesized locally; no external assets or downloads.</span></footer>
