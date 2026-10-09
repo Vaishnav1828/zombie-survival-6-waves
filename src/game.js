@@ -9,7 +9,7 @@
   let state = State.MENU, player, wave = 1, score = 0, waveKills = 0, spawned = 0;
   let spawnTimer = .8, weaponTimer = 0, dropTimer = 2, fireCooldown = 0, toastTimer = 0, shake = 0, elapsed = 0, lastTime = 0;
   let soundOn = false, audio = null, masterGain = null, highScore = safeRead("afterdarkBest", 0), totalKills = 0, weaponsCollected = 0;
-  const keys = Object.create(null), pointer = { x:W/2, y:H/2, down:false, inside:false };
+  const keys = Object.create(null), pointer = { x:W/2, y:H/2, down:false, inside:false };\n  const touchMove = { x:0, y:0, active:false, pointerId:null };\n  let mobileAutoFire = false;
   const enemyPool = [], bulletPool = [], particlePool = [], enemies = [], bullets = [], particles = [], pickups = [];
   const rand = (a,b) => a + Math.random() * (b-a);
   const clamp = (n,a,b) => Math.max(a, Math.min(b,n));
@@ -124,7 +124,7 @@
   }
   function fire() {
     if(state!==State.PLAYING||!player.weapon||player.ammo<=0||fireCooldown>0)return;
-    const dx=pointer.x-player.x,dy=pointer.y-player.y,d=Math.hypot(dx,dy)||1;player.angle=Math.atan2(dy,dx);
+    if(mobileAutoFire){if(enemies.length){let target=enemies[0],best=dist(player.x,player.y,target.x,target.y);for(let i=1;i<enemies.length;i++){const candidate=enemies[i],d=dist(player.x,player.y,candidate.x,candidate.y);if(d<best){target=candidate;best=d;}}player.angle=Math.atan2(target.y-player.y,target.x-player.x);}}else{const dx=pointer.x-player.x,dy=pointer.y-player.y,d=Math.hypot(dx,dy)||1;player.angle=Math.atan2(dy,dx);}
     const shot=(a,damage,speed)=>spawnBullet(player.x+Math.cos(a)*16,player.y+Math.sin(a)*16,Math.cos(a)*speed,Math.sin(a)*speed,false,damage,player.weapon==="SHOTGUN"?3.7:2.8,1.15);
     if(player.weapon==="SHOTGUN"){
       for(let i=0;i<7;i++)shot(player.angle+rand(-.24,.24),2.4,570);
@@ -298,6 +298,45 @@
   canvas.addEventListener("pointerdown",e=>{pointerPos(e);if(e.button===0){pointer.down=true;if(canvas.setPointerCapture)canvas.setPointerCapture(e.pointerId);if(state===State.PLAYING)fire();}});
   window.addEventListener("pointerup",()=>pointer.down=false);
   canvas.addEventListener("pointerleave",()=>{pointer.inside=false;});
+  // Mobile joystick: pointer movement maps to a normalized direction.
+  const movePad = $("movePad"), moveKnob = $("moveKnob"), fireTouch = $("fireTouch");
+  function updateTouchStick(e) {
+    const rect = movePad.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+    const maxRadius = Math.max(22, rect.width * .34);
+    let dx = (e.clientX - cx) / maxRadius, dy = (e.clientY - cy) / maxRadius;
+    const length = Math.hypot(dx, dy);
+    if (length > 1) { dx /= length; dy /= length; }
+    touchMove.x = dx; touchMove.y = dy;
+    moveKnob.style.transform = "translate(calc(-50% + " + (dx * maxRadius) + "px), calc(-50% + " + (dy * maxRadius) + "px))";
+  }
+  function releaseTouchStick(e) {
+    if (touchMove.pointerId !== null && e.pointerId !== touchMove.pointerId) return;
+    touchMove.x = 0; touchMove.y = 0; touchMove.active = false; touchMove.pointerId = null;
+    moveKnob.style.transform = "translate(-50%,-50%)";
+  }
+  movePad.addEventListener("pointerdown", e => {
+    e.preventDefault(); e.stopPropagation();
+    touchMove.active = true; touchMove.pointerId = e.pointerId;
+    if (movePad.setPointerCapture) movePad.setPointerCapture(e.pointerId);
+    updateTouchStick(e);
+  });
+  movePad.addEventListener("pointermove", e => {
+    if (touchMove.active && e.pointerId === touchMove.pointerId) { e.preventDefault(); updateTouchStick(e); }
+  });
+  movePad.addEventListener("pointerup", releaseTouchStick);
+  movePad.addEventListener("pointercancel", releaseTouchStick);
+  movePad.addEventListener("lostpointercapture", releaseTouchStick);
+  fireTouch.addEventListener("pointerdown", e => {
+    e.preventDefault(); e.stopPropagation();
+    mobileAutoFire = true;
+    if (fireTouch.setPointerCapture) fireTouch.setPointerCapture(e.pointerId);
+    if (state === State.PLAYING && player.weapon) fire();
+  });
+  function stopTouchFire() { mobileAutoFire = false; }
+  fireTouch.addEventListener("pointerup", stopTouchFire);
+  fireTouch.addEventListener("pointercancel", stopTouchFire);
+  fireTouch.addEventListener("lostpointercapture", stopTouchFire);
   startBtn.addEventListener("click",()=>{
     sfx("click");if(state===State.PAUSED){pause();return;}resetOverlay();beginGame();
   });
