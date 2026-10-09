@@ -9,7 +9,9 @@
   let state = State.MENU, player, wave = 1, score = 0, waveKills = 0, spawned = 0;
   let spawnTimer = .8, weaponTimer = 0, dropTimer = 2, fireCooldown = 0, toastTimer = 0, shake = 0, elapsed = 0, lastTime = 0;
   let soundOn = false, audio = null, masterGain = null, highScore = safeRead("afterdarkBest", 0), totalKills = 0, weaponsCollected = 0;
-  const keys = Object.create(null), pointer = { x:W/2, y:H/2, down:false, inside:false };\n  const touchMove = { x:0, y:0, active:false, pointerId:null };\n  let mobileAutoFire = false;
+  const keys = Object.create(null), pointer = { x:W/2, y:H/2, down:false, inside:false };
+  const touchMove = { x:0, y:0, active:false, pointerId:null };
+  let mobileAutoFire = false;
   const enemyPool = [], bulletPool = [], particlePool = [], enemies = [], bullets = [], particles = [], pickups = [];
   const rand = (a,b) => a + Math.random() * (b-a);
   const clamp = (n,a,b) => Math.max(a, Math.min(b,n));
@@ -151,12 +153,13 @@
     if(state!==State.PLAYING)return;
     elapsed+=dt;fireCooldown=Math.max(0,fireCooldown-dt);player.invuln=Math.max(0,player.invuln-dt);shake=Math.max(0,shake-dt*24);
     if(toastTimer>0){toastTimer-=dt;if(toastTimer<=0)toast.classList.remove("show");}
-    const dx=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0);
-    const dy=(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0);
+    const dx=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0)+touchMove.x;
+    const dy=(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0)+touchMove.y;
     if(dx||dy){const d=Math.hypot(dx,dy);player.x+=dx/d*player.speed*dt;player.y+=dy/d*player.speed*dt;}
     player.x=clamp(player.x,17,W-17);player.y=clamp(player.y,17,H-17);
     if(pointer.inside)player.angle=Math.atan2(pointer.y-player.y,pointer.x-player.x);
-    if(pointer.down||keys.space)fire();
+    if(mobileAutoFire && enemies.length){let target=enemies[0],best=dist(player.x,player.y,target.x,target.y);for(let i=1;i<enemies.length;i++){const candidate=enemies[i],d=dist(player.x,player.y,candidate.x,candidate.y);if(d<best){target=candidate;best=d;}}player.angle=Math.atan2(target.y-player.y,target.x-player.x);}
+    if(pointer.down||keys.space||mobileAutoFire)fire();
     if(player.weapon){weaponTimer-=dt;if(weaponTimer<=0||player.ammo<=0)loseWeapon();}
     else {dropTimer-=dt;if(dropTimer<=0&&!pickups.length)spawnWeapon();}
     for(let i=pickups.length-1;i>=0;i--){
