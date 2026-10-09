@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#080c12">
+  <meta name="description" content="A six-wave zombie survival game. Find timed weapons, fight the infected, and survive the night.">
+  <title>AFTERDARK — Zombie Survival</title>
+  <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+<main id="app">
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">☣</div><div><h1>AFTERDARK <span class="red">/</span> SURVIVAL</h1><p>Last stand protocol · Sector 06</p></div></div>
+    <div class="top-actions"><span class="tiny-pill">● OFFLINE READY</span><button id="soundToggle" class="sound-toggle" type="button" aria-pressed="false">♫ Sound: OFF</button></div>
+  </header>
+  <section id="hud" aria-label="Game statistics">
+    <div class="stat health"><div class="label">♥ Vitality</div><div class="value"><span id="hp">100</span><span class="max-hp"> / 100</span></div><div class="bar-wrap"><div class="bar" id="healthBar"></div></div></div>
+    <div class="stat weapon"><div class="label">⚒ Equipped</div><div class="value" id="weapon">UNARMED</div></div>
+    <div class="stat"><div class="label">⌛ Weapon timer</div><div class="value" id="timer">STANDBY</div></div>
+    <div class="stat"><div class="label">☣ Current wave</div><div class="value" id="wave">01 / 06</div></div>
+    <div class="stat"><div class="label">✦ Score</div><div class="value" id="score">00000</div></div>
+    <div class="stat"><div class="label">♛ Personal best</div><div class="value" id="best">00000</div></div>
+  </section>
+  <section class="arena" aria-label="Zombie survival arena">
+    <canvas id="game" width="960" height="600" aria-label="Game field. Move with WASD or arrow keys, aim with mouse, click to fire."></canvas>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <div id="overlay">
+      <div class="modal"><div class="eyebrow">Emergency Broadcast // 06</div><h2 id="title">THE NIGHT<br><span>IS HUNGRY.</span></h2><p id="message">Six waves stand between you and sunrise. Timed weapons are your only advantage. Find them, fight smart, and do not get surrounded.</p><div class="feature-row"><span class="feature">6 escalating waves</span><span class="feature">2 enemy classes</span><span class="feature">Timed weapon drops</span></div><button id="start" class="main-btn" type="button">ENTER THE QUARANTINE</button><p class="help"><b>MOVE</b> <span class="keycap">W</span><span class="keycap">A</span><span class="keycap">S</span><span class="keycap">D</span> or arrows &nbsp; <b>AIM</b> mouse &nbsp; <b>FIRE</b> click / Space<br><b>PAUSE</b> <span class="keycap">P</span> &nbsp; <b>RESTART</b> <span class="keycap">R</span> &nbsp; Enable sound using the top-right button</p></div>
+    </div>
+  </section>
+  <footer id="bottomline"><span class="live-hint" id="statusLine">OBJECTIVE: SURVIVE. ADAPT. ESCAPE.</span><span><span class="keycap">P</span> Pause <span class="keycap">R</span> Restart</span><span class="footnote">All sounds are synthesized locally; no external assets or downloads.</span></footer>
+</main>
+<script src="src/game.js"></script>
+</body>
+</html>
