@@ -1,0 +1,12 @@
+{
+  "name": "afterdark-zombie-survival",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Self-contained six-wave zombie survival browser game",
+  "scripts": {
+    "test": "node tests/smoke-test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
