@@ -8,7 +8,7 @@
   const State = Object.freeze({ MENU:"MENU", PLAYING:"PLAYING", PAUSED:"PAUSED", GAME_OVER:"GAME_OVER", VICTORY:"VICTORY" });
   let state = State.MENU, player, wave = 1, score = 0, waveKills = 0, spawned = 0;
   let spawnTimer = .8, weaponTimer = 0, dropTimer = 2, fireCooldown = 0, toastTimer = 0, shake = 0, elapsed = 0, lastTime = 0;
-  let soundOn = false, audio = null, masterGain = null, highScore = safeRead("afterdarkBest", 0), totalKills = 0, weaponsCollected = 0;
+  let soundOn = safeReadBool("afterdarkSound", false), audio = null, masterGain = null, highScore = safeRead("afterdarkBest", 0), totalKills = 0, weaponsCollected = 0;
   const keys = Object.create(null), pointer = { x:W/2, y:H/2, down:false, inside:false };
   const touchMove = { x:0, y:0, active:false, pointerId:null };
   let mobileAutoFire = false;
@@ -17,10 +17,13 @@
   const clamp = (n,a,b) => Math.max(a, Math.min(b,n));
   const dist = (x1,y1,x2,y2) => Math.hypot(x2-x1,y2-y1);
   function safeRead(key, fallback) { try { const n = Number(localStorage.getItem(key)); return Number.isFinite(n) && n >= 0 ? n : fallback; } catch (_) { return fallback; } }
+  function safeReadBool(key, fallback) { try { const value = localStorage.getItem(key); return value === null ? fallback : value === "true"; } catch (_) { return fallback; } }
   function fmt(n) { return String(Math.max(0, Math.floor(n))).padStart(5, "0"); }
   function getRank() { return score >= 10000 ? "S" : score >= 7500 ? "A" : score >= 5000 ? "B" : score >= 2500 ? "C" : "D"; }
   function wavePlan(n) { return { count:5+(n-1)*4, speed:52+(n-1)*8, ranged:n<3?0:Math.floor((n-1)*.85), health:2+Math.floor((n-1)/3), gap:Math.max(.28,.92-n*.085) }; }
   $("best").textContent = fmt(highScore);
+  $("soundToggle").textContent = soundOn ? "♫ Sound: ON" : "♫ Sound: OFF";
+  $("soundToggle").setAttribute("aria-pressed", String(soundOn));
 
   // Procedural sound effects: no external audio files or network requests.
   function initAudio() {
@@ -67,7 +70,9 @@
     else if (kind==="click") tone(430,.035,"sine",.07,.9);
   }
   $("soundToggle").addEventListener("click", () => {
-    soundOn = !soundOn; initAudio();
+    soundOn = !soundOn;
+    try { localStorage.setItem("afterdarkSound", String(soundOn)); } catch (_) {}
+    initAudio();
     if (masterGain && audio) { audio.resume(); masterGain.gain.setTargetAtTime(soundOn?.24:0,audio.currentTime,.025); }
     $("soundToggle").textContent = soundOn ? "♫ Sound: ON" : "♫ Sound: OFF";
     $("soundToggle").setAttribute("aria-pressed",String(soundOn));
