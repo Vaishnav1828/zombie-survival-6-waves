@@ -20,16 +20,16 @@ Then visit <http://localhost:8000>.
 
 | Action | Control |
 |---|---|
-| Move | `W A S D` or arrow keys |
+| Move | `W A S D` or arrow keys; on mobile, drag the left virtual joystick |
 | Aim | Mouse |
-| Fire | Left mouse button or `Space` |
+| Fire | Left mouse button or `Space`; on mobile, hold the red **FIRE** button for auto-aim |
 | Pause / resume | `P` |
 | Restart after game over / victory | `R` or the on-screen button |
 | Sound | `Sound: ON/OFF` button in the top-right |
 
 Audio is synthesized locally with the Web Audio API (shooting, shotgun blast, pickup, hit, ranged attack, kill, wave start, victory and game-over cues). No external audio files, downloads, or network requests are required. Browsers require a user gesture before playing audio.
 
-## Gameplay
+## Mobile play\n\nOpen the [live mobile game](https://vaishnav1828.github.io/zombie-survival-6-waves/) on your phone. The responsive canvas provides an on-screen joystick on the left and a hold-to-fire button on the right. The fire button automatically aims at the nearest active zombie. No app installation is needed.\n\n## Gameplay
 
 - **Timed weapon drops:** signal markers appear with a pickup countdown. Collect them to equip a temporary shotgun, SMG, or rifle with limited ammo and weapon time.
 - **Escape phase:** when a weapon expires or runs out of ammo, keep moving while you wait for another drop.
