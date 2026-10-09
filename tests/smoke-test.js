@@ -51,5 +51,8 @@ assert.ok(game.includes("AudioContext") && game.includes("function sfx(kind)"), 
 assert.ok(game.includes('localStorage.setItem("afterdarkBest"'), "Persistent best score write is missing");
 assert.ok(css.includes("@media(max-width:740px)"), "Responsive layout rules are missing");
 console.log("✓ Audio, persistent score, and responsive styles are present");
+assert.ok(html.includes('id="movePad"') && html.includes('id="fireTouch"'), "Mobile joystick / fire markup is missing");
+assert.ok(game.includes("touchMove.x") && game.includes("mobileAutoFire"), "Mobile touch input is not wired into the game loop");
+console.log("✓ Mobile joystick and auto-aim fire controls are wired");
 
 console.log("\nAll smoke tests passed.");
