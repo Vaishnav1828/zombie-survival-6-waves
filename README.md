@@ -61,3 +61,14 @@ Audio is synthesized locally with the Web Audio API (shooting, shotgun blast, pi
 ## Known limitations / next improvements
 
 This is a compact arcade prototype: it uses stylized canvas-drawn characters instead of imported sprite sheets, stores the best score per browser rather than on a server, and uses a single arena. Future improvements could add authored sprite animation, difficulty settings, mobile touch controls, configurable sound volume, and automated gameplay tests.
+
+
+## Smoke tests
+
+Node.js 18 or newer is needed only to run the dependency-free checks:
+
+```bash
+npm test
+```
+
+The smoke tests compile-check the game script, validate HTML asset and UI references, verify the state machine and object pools, and assert that the calculated wave counts are 5, 9, 13, 17, 21, and 25 with increasing speed/health. GitHub Actions runs these checks on pushes to `main` and pull requests.
