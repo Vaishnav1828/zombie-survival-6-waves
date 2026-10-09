@@ -1,3 +1,5 @@
+[![Smoke tests](https://github.com/Vaishnav1828/zombie-survival-6-waves/actions/workflows/ci.yml/badge.svg)](https://github.com/Vaishnav1828/zombie-survival-6-waves/actions/workflows/ci.yml)
+
 # AFTERDARK — Zombie Survival: 6 Waves
 
 A self-contained, 2D browser survival game built for the **GAME-GD1 Wave Survival Game** assignment. Survive six escalating waves, collect temporary weapons before the pickup signal expires, and decide when to fight or escape. The game runs without a framework, server-side code, or third-party assets.
